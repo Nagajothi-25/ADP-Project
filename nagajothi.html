@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Student Registration Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .error {
+            border-color: #e74c3c !important;
+        }
+        
+        .error-msg {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .success-msg {
+            color: #27ae60;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Senior Student Registration</h1>
+        <form id="registrationForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <div class="error-msg"></div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <div class="error-msg"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-msg"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="studentId">Student ID *</label>
+                <input type="text" id="studentId" name="studentId" placeholder="e.g., STU123456" required>
+                <div class="error-msg"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="gpa">GPA *</label>
+                    <input type="number" id="gpa" name="gpa" min="0" max="4" step="0.01" required>
+                    <div class="error-msg"></div>
+                </div>
+                <div class="form-group">
+                    <label for="graduationDate">Graduation Date *</label>
+                    <input type="date" id="graduationDate" name="graduationDate" required>
+                    <div class="error-msg"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="major">Major *</label>
+                <select id="major" name="major" required>
+                    <option value="">Select Major</option>
+                    <option value="CS">Computer Science</option>
+                    <option value="ENG">Engineering</option>
+                    <option value="BUS">Business</option>
+                    <option value="BIO">Biology</option>
+                    <option value="CHEM">Chemistry</option>
+                </select>
+                <div class="error-msg"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>Interests</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="interests" value="Leadership"> Leadership</label>
+                    <label><input type="checkbox" name="interests" value="Research"> Research</label>
+                    <label><input type="checkbox" name="interests" value="Internship"> Internship</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself..."></textarea>
+            </div>
+            
+            <button type="submit" id="submitBtn">Register</button>
+        </form>
+    </div>
+    
+    <script>
+        const form = document.getElementById('registrationForm');
+        
+        const validations = {
+            firstName: (val) => val.trim().length >= 2,
+            lastName: (val) => val.trim().length >= 2,
+            email: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+            studentId: (val) => /^STU\d{6}$/.test(val),
+            gpa: (val) => val >= 0 && val <= 4,
+            graduationDate: (val) => new Date(val) > new Date(),
+            major: (val) => val !== ''
+        };
+        
+        const errorMessages = {
+            firstName: 'First name must be at least 2 characters',
+            lastName: 'Last name must be at least 2 characters',
+            email: 'Please enter a valid email',
+            studentId: 'Student ID must be in format STU123456',
+            gpa: 'GPA must be between 0 and 4',
+            graduationDate: 'Graduation date must be in the future',
+            major: 'Please select a major'
+        };
+        
+        function validateField(fieldName) {
+            const field = document.getElementById(fieldName);
+            const errorMsg = field.parentElement.querySelector('.error-msg');
+            const isValid = validations[fieldName](field.value);
+            
+            if (!isValid) {
+                field.classList.add('error');
+                errorMsg.textContent = errorMessages[fieldName];
+            } else {
+                field.classList.remove('error');
+                errorMsg.textContent = '';
+            }
+            return isValid;
+        }
+        
+        Object.keys(validations).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            field.addEventListener('blur', () => validateField(fieldName));
+        });
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let isFormValid = true;
+            Object.keys(validations).forEach(fieldName => {
+                if (!validateField(fieldName)) {
+                    isFormValid = false;
+                }
+            });
+            
+            if (isFormValid) {
+                alert('Registration successful!');
+                form.reset();
+            }
+        });
+    </script>
+</body>
+</html>
